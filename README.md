@@ -18,6 +18,21 @@ db.users.find({
 Написать запрос-агрегацию для выборки всех студентов, у которых результат по экзамену (type: "exam") более 90% (использование unwind)
 
 ```js
+db.users.aggregate([{
+  $unwind: '$scores'
+}, {
+  $match: {
+    'scores.type': 'exam',
+    'scores.score': {
+      $gt: 90
+    }
+  }
+}, {
+  $project: {
+    name: 1,
+    exam: '$scores.score'
+  }
+}])
 ```
 
 Студентам с именем Dusti Lemmond добавить поле “accepted” со значением true.
